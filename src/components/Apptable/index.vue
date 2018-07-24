@@ -39,7 +39,7 @@
 		      @current-change="handleCurrentChange"
 		      :current-page.sync="currentPage"
 		      background
-		      :page-sizes="[100, 200, 300, 400]"
+		      :page-sizes="[10, 20, 50, 100]"
 		      :page-size="pageSize"
 		      layout="sizes, prev, pager, next"
 		      :total="pageNumber">
@@ -56,7 +56,7 @@
 	  	return {
 	  		pageNumber: 1000,
 	  		currentPage: 2,
-	  		pageSize: 100,
+	  		pageSize: 10,
 	  		listLoading: false,
 	  		list:[
 	  			{"id":'关系数据库中间件',"img":'@/img/app.png',"timestamp":450322752289,"author":"Jessica","reviewer":"Margaret","title":"Xprsqb Lfykrgzgp Eqjt Dtvcdn Wqenu Yooecnl Wtlwpmyx Qowur Lfdf","content_short":"我是测试数据","content":"<p>我是测试数据我是测试数据</p><p><img src=\"https://wpimg.wallstcn.com/4c69009c-0fd4-4153-b112-6cb53d1cf943\"></p>","forecast":14.28,"importance":2,"type":"CN","status":"draft","display_time":"2000-02-04 11:42:35","comment_disabled":true,"pageviews":3003,"image_uri":"https://wpimg.wallstcn.com/e4558086-631c-425c-9430-56ffb46e70b3","platforms":["a-platform"]},
@@ -73,6 +73,7 @@
 	  	}
 	  },
 	  created() {
+	  	this.pageNumber = this.list.length;
 	    //this.fetchData()
 	  },
 	  computed:{

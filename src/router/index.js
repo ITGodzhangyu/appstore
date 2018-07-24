@@ -22,7 +22,6 @@ import Layout from '../views/layout/Layout'
   }
 **/
 export const constantRouterMap = [
-//{ path: '/login', component: () => import('@/views/login/index'), hidden: true },
   { path: '/404', component: () => import('@/views/404'), hidden: true },
 
   {
@@ -44,8 +43,8 @@ export const constantRouterMap = [
     hidden: true,
     children: [{
       path: 'appallstore',
-      meta:{title:'全部应用'},
-      name:'/全部应用',
+      meta: { title: '全部应用' },
+      name: '/全部应用',
       component: () => import('@/views/appallstore/index')
     }]
   },
@@ -57,8 +56,8 @@ export const constantRouterMap = [
     hidden: true,
     children: [{
       path: 'myapp',
-      meta:{title:'我的应用'},
-      name:'/我的应用',
+      meta: { title: '我的应用' },
+      name: '/我的应用',
       component: () => import('@/views/myapp/index')
     }]
   },
@@ -70,52 +69,24 @@ export const constantRouterMap = [
     hidden: true,
     children: [{
       path: 'detailpages',
-      meta:{title:'关系数据库中间件'},
-      name:'/关系数据库中间件',
+      meta: { title: '关系数据库中间件' },
+      name: '/关系数据库中间件',
       component: () => import('@/views/detailpages/index')
     }]
   },
-  {
-    path: '/example',
-    component: Layout,
-    redirect: '/example/table',
-    name: 'Example',
-    meta: { title: 'Example', icon: 'example' },
-    children: [
-      {
-        path: 'table',
-        name: 'Table',
-        component: () => import('@/views/table/index'),
-        meta: { title: 'Table', icon: 'table' }
-      },
-      {
-        path: 'tree',
-        name: 'Tree',
-        component: () => import('@/views/tree/index'),
-        meta: { title: 'Tree', icon: 'tree' }
-      },
-      {
-        path: 'zhang',
-        name: 'Zhang',
-        component: () => import('@/views/zhang'),
-        meta: { title: 'Zhang', icon: '' }
-      }
-    ]
-  },
-
-  {
-    path: '/form',
-    component: Layout,
-    children: [
-      {
-        path: 'index',
-        name: 'Form',
-        component: () => import('@/views/form/index'),
-        meta: { title: 'Form', icon: 'form' }
-      }
-    ]
-  },
-
+	{
+	    path: '/',
+	    component: Layout,
+	    redirect: '/appgrounding',
+	    name: '应用商城',
+	    hidden: true,
+	    children: [{
+	      path: 'appgrounding',
+	      meta: { title: '应用上架' },
+	      name: '/应用上架',
+	      component: () => import('@/views/appgrounding/index')
+	    }]
+	},
   { path: '*', redirect: '/404', hidden: true }
 ]
 

@@ -1,11 +1,13 @@
 <template>
 	<div class='appkey'>
-		<el-button type="primary" size="small">申请 AppID</el-button>
+		<el-button type="primary" size="small" @click='addDialog = true'>申请 AppID</el-button>
 		<div class='app-table'>
 			<el-table :data="list" fit highlight-current-row @row-click='' style="width: 100%" v-loading.body="listLoading" element-loading-text="请给我点时间！" header-cell-class-name='table-head'>
 			    <el-table-column align="left" label="AppID" prop='id'>
 			      <template slot-scope="scope">
-			        <span style='color:#1482F0'>{{scope.row.id}}</span>
+			      	<el-tooltip class="item" effect="dark" content="点击查看详情" placement="top">
+			        		<span style='color:#1482F0;cursor: pointer' @click='detailchack(scope.row)'>{{scope.row.id}}</span>
+			        </el-tooltip>
 			      </template>
 			    </el-table-column>	
 			    <el-table-column label="关联应用"  sortable='true' prop='author'>
@@ -16,8 +18,22 @@
 			
 			    <el-table-column label="状态" sortable='true' prop='type'>
 			      <template slot-scope="scope">
-			        <i :class='scope.row.type | typefilter'></i>
-			        <span>{{scope.row.type | textfilter}}</span>
+			      	<div v-if='scope.row.type == 1'>
+			      		<i class='el-icon-success'></i>
+				        <span>正常</span>
+			      	</div>
+			      	<div v-else-if='scope.row.type == 3'>
+				        <el-tooltip class="item" effect="dark" content="AppID 已停用，请联系管理员" placement="top">
+					     	<i class='el-icon-remove'></i>
+					    </el-tooltip>
+				        <span>停用</span>
+			      	</div>
+			      	<div v-else>
+				        <el-tooltip class="item" effect="dark" content="AppID 异常，请联系管理员" placement="top">
+					     	<i class='el-icon-warning'></i>
+					    </el-tooltip>
+				        <span>异常</span>
+			      	</div>
 			      </template>
 			    </el-table-column>
 			
@@ -29,13 +45,13 @@
 			
 			    <el-table-column label="操作" prop='importance' width='100px'>
 			    	<template slot-scope="scope">
-			      <el-dropdown :hide-on-click="false"  placement='bottom-start' @command="handleCommand">
+			      <el-dropdown :hide-on-click="false"  placement='bottom-start' @command="handleCommand($event,scope.row)">
 					  <span class="el-dropdown-link">
 					    <i class="el-icon-more"></i>
 					  </span>
 					  <el-dropdown-menu slot="dropdown">
-					    <el-dropdown-item command="1">编辑</el-dropdown-item>
-					    <el-dropdown-item command="0">删除</el-dropdown-item>
+					    <el-dropdown-item command="edit" v-show='scope.row.type == 1'>编辑</el-dropdown-item>
+					    <el-dropdown-item command="delete">删除</el-dropdown-item>
 					  </el-dropdown-menu>
 					</el-dropdown>
 					</template>
@@ -48,31 +64,56 @@
 			      @current-change="handleCurrentChange"
 			      :current-page.sync="currentPage"
 			      background
-			      :page-sizes="[100, 200, 300, 400]"
+			      :page-sizes="[10, 20, 50, 100]"
 			      :page-size="pageSize"
 			      layout="sizes, prev, pager, next"
 			      :total="pageNumber">
 			    </el-pagination>
 			  </div>
 		</div>
+		<el-dialog title="编辑" :visible.sync="editDialog" width='600px'>
+		  <edit-page :row='editcheck' @closedialog='editDialog=false' @successdialog='returnSuccess'></edit-page>
+		</el-dialog>
+		<el-dialog title="删除" :visible.sync="deleteDialog" width='450px'>
+		  <delete-page :row='editcheck' @closedialog='deleteDialog=false' @successdialog='returnSuccess'></delete-page>
+		</el-dialog>
+		<el-dialog title="申请AppID" :visible.sync="addDialog" width='450px'>
+		  <add-page :row='editcheck' @closedialog='addDialog=false' @successdialog='returnSuccess'></add-page>
+		</el-dialog>
+		<el-dialog title="AppID详情" :visible.sync="detailDialog" width='450px'>
+		  <detail-page :row='editcheck' @closedialog='detailDialog=false'></detail-page>
+		</el-dialog>
 	</div>
 </template>
 
 <script>
+	import EditPage from './operation/edit'
+	import DeletePage from './operation/delete'
+	import AddPage from './operation/add'
+	import DetailPage from './operation/detail'
 	export default {
+		components:{ EditPage, DeletePage, AddPage, DetailPage },
 	  data() {
 	  	return {
-	  		pageNumber: 1000,
+	  		pageNumber: 100,
+	  		editDialog: false,
+	  		addDialog: false,
+	  		detailDialog: false,	  		
+	  		deleteDialog: false,
+	  		editcheck:null,
 	  		currentPage: 2,
-	  		pageSize: 100,
+	  		pageSize: 10,
 	  		listLoading: false,
 	  		list:[
-	  			{"type":'1','id':'AppID_sadasabfbfbbsahwhgevdff','author':'未关联应用','timestamp':'2018-7-8 11:30:09'},
-	  			{"type":'2','id':'AppID_sadasabfbfbbsahwhgevdff','author':'未关联应用','timestamp':'2018-7-8 11:30:09'},
-	  			{"type":'3','id':'AppID_sadasabfbfbbsahwhgevdff','author':'未关联应用','timestamp':'2018-7-8 11:30:09'},
-	  			{"type":'3','id':'AppID_sadasabfbfbbsahwhgevdff','author':'未关联应用','timestamp':'2018-7-8 11:30:09'}	
+	  			{"type":'1','id':'AppID_sadasabfbfbbsahwhgevdff1','author':'未关联应用','timestamp':'2018-7-8 11:30:09'},
+	  			{"type":'2','id':'AppID_sadasabfbfbbsahwhgevdff2','author':'未关联应用','timestamp':'2018-7-8 11:30:09'},
+	  			{"type":'1','id':'AppID_sadasabfbfbbsahwhgevdff3','author':'未关联应用','timestamp':'2018-7-8 11:30:00'},
+	  			{"type":'3','id':'AppID_sadasabfbfbbsahwhgevdff4','author':'未关联应用','timestamp':'2018-7-8 11:30:09'}	
 	  		]
 	  	}
+	  },
+	  created() {
+	  	this.pageNumber = this.list.length;
 	  },
 	  methods: {
 	  		handleSizeChange(val) {
@@ -86,27 +127,37 @@
 		  		//this.pageSize = val
 		  		//this.fetchData()
 		  	},
-		  	handleCommand(command) {
-		  		
+		  	detailchack(row) {
+		  		this.editcheck = row;
+		  		this.detailDialog = true;
+		  	},
+		  	returnSuccess() {
+		  		if(this.deleteDialog){
+		  			this.deleteDialog = false;
+		  			this.list.forEach((item,i) => {
+			  			if(item.id == this.editcheck.id){
+			  				this.list.splice(i,1);
+			  			}
+			  		});
+		  		}else if (this.addDialog){
+		  			this.addDialog = false;
+		  			let data = {"type":'1','id':'AppID_sadasabfbfbbsahwhgevdff'+this.list.length+2,'author':'未关联应用','timestamp':'2018-7-8 11:30:09'};
+		  			this.list.push(data);
+		  		}
+		  		else {
+		  			this.editDialog = false;
+		  		}
+		  		//this.fetchData()
+		  	},
+		  	handleCommand(command,row) {
+		  		if(command == 'edit'){
+		  			this.editcheck = row;
+		  			this.editDialog = true;
+		  		}else if (command == 'delete'){
+		  			this.editcheck = row;
+		  			this.deleteDialog = true;
+		  		}
 		  	}
-	  },
-	  filters: {
-	  	typefilter(type) {
-	  		switch(type) {
-	  			case '1' : return 'el-icon-success';
-	  			case '2' : return 'el-icon-warning';
-	  			case '3' : return 'el-icon-remove';
-	  			default: return 'el-icon-warning';
-	  		}
-	  	},
-	  	textfilter(type) {
-	  		switch(type) {
-	  			case '1' : return '正常';
-	  			case '2' : return '异常';
-	  			case '3' : return '停用';
-	  			default: return '异常';
-	  		}
-	  	}
 	  }
 	}
 </script>
@@ -130,7 +181,17 @@
 		    color: #409EFF;
 		  }
 		  .block {
-		  	margin-top: 20px;
+		  	height: 40px;
+			padding: 15px;
+			font-weight: 300;
+			.el-pagination {
+				float: right;
+			}
+			.demonstration {
+				float: right;
+				line-height: 30px;
+				font-size: 14px;
+			}
 		  }
 	}
 </style>
