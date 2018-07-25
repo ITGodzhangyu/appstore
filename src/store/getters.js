@@ -5,6 +5,7 @@ const getters = {
   avatar: state => state.user.avatar,
   apptype: state => state.apptype.type,
   appname: state => state.apptype.name,
+  appground: state => state.appground.id,
   name: state => state.user.name,
   roles: state => state.user.roles
 }

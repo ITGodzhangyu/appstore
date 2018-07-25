@@ -3,7 +3,7 @@
 			<div style="padding: 0 20px;background: #fff">
 				<div class='ground-title'>
 					<h2>应用上架</h2>
-					<el-button type='primary' size="mini">新建上架</el-button>
+					<el-button type='primary' size="mini" @click='addground'>新建上架</el-button>
 				</div>
 			</div>
 			<ul>
@@ -90,6 +90,9 @@
 	  	searchApp() {
 	  		this.searchname = this.inputval;
 	  		alert(this.searchname)
+	  	},
+	  	addground() {
+	  		this.$router.push('/appgroundedit');  
 	  	}
 	  }
 	}

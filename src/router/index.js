@@ -74,6 +74,45 @@ export const constantRouterMap = [
       component: () => import('@/views/detailpages/index')
     }]
   },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/appgroundedit',
+    name: '应用商城',
+    hidden: true,
+    children: [{
+      path: 'appgroundedit',
+      meta: { title: '应用上架' },
+      name: '/应用上架',
+      component: () => import('@/views/appgroundedit/index')
+    }]
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/appgrounddetail',
+    name: '应用商城',
+    hidden: true,
+    children: [{
+      path: 'appgrounddetail',
+      meta: { title: '应用上架' },
+      name: '/应用上架',
+      component: () => import('@/views/appgrounddetail/index')
+    }]
+  },
+  {
+    path: '/',
+    component: Layout,
+    redirect: '/appkey',
+    name: '应用商城',
+    hidden: true,
+    children: [{
+      path: 'appkey',
+      meta: { title: '密钥管理' },
+      name: '/密钥管理',
+      component: () => import('@/views/appkey/index')
+    }]
+  },
 	{
 	    path: '/',
 	    component: Layout,

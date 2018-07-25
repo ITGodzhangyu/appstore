@@ -3,6 +3,7 @@
 		<div class='search'>
     			<router-link to="/myapp">我的应用</router-link>
         		<router-link to="/appgrounding">应用上架</router-link>
+        		<router-link to="/appkey">密钥管理</router-link>
         		<div class='search-input'>
 			  <el-input placeholder="请输入应用名称" v-model="inputval" size="small">
 			    <el-button slot="append" icon="el-icon-search" @click='searchApp'></el-button>
