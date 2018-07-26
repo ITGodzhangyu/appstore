@@ -4,7 +4,7 @@
     </el-button>
     <el-dialog append-to-body :visible.sync="dialogVisible">
       <el-upload class="editor-slide-upload" action="https://httpbin.org/post" :multiple="true" :file-list="fileList" :show-file-list="true"
-        list-type="picture-card" :on-remove="handleRemove" :on-success="handleSuccess" :before-upload="beforeUpload">
+        list-type="picture-card" :on-remove="handleRemove" :before-upload="beforeUpload">
         <el-button size="small" type="primary">点击上传</el-button>
       </el-upload>
       <el-button @click="dialogVisible = false">取 消</el-button>
@@ -41,8 +41,8 @@ export default {
         this.$message('请等待所有图片上传成功 或 出现了网络问题，请刷新页面重新上传！')
         return
       }
-      console.log(arr)
       this.$emit('successCBK', arr)
+      console.log(arr)
       this.listObj = {}
       this.fileList = []
       this.dialogVisible = false
@@ -74,11 +74,16 @@ export default {
       const fileName = file.uid
       this.listObj[fileName] = {}
       return new Promise((resolve, reject) => {
-        const img = new Image()
-        img.src = _URL.createObjectURL(file)
-        img.onload = function() {
-          _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
-        }
+      	var arr = [{
+      		url:  _URL.createObjectURL(file),
+      		uid:  fileName
+      	}]
+      	this.$emit('successCBK', arr)
+//      const img = new Image()
+//      img.src = _URL.createObjectURL(file)
+//      img.onload = function() {
+//        _self.listObj[fileName] = { hasSuccess: false, uid: file.uid, width: this.width, height: this.height }
+//      }
         resolve(true)
       })
     }

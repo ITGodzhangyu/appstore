@@ -4,10 +4,8 @@
 			<h2>AppID密钥管理</h2>
 			<el-table :data="list" fit highlight-current-row @row-click='' style="width: 100%" v-loading.body="listLoading" element-loading-text="请给我点时间！" header-cell-class-name='table-head'>
 			    <el-table-column align="left" label="AppID" prop='id'>
-			      <template slot-scope="scope">
-			      	<el-tooltip class="item" effect="dark" content="点击查看详情" placement="top">
-			        		<span style='color:#1482F0;cursor: pointer' @click='detailchack(scope.row)'>{{scope.row.id}}</span>
-			        </el-tooltip>
+			      <template slot-scope="scope">			      	
+			        	<span style='color:#1482F0'>{{scope.row.id}}</span>			       
 			      </template>
 			    </el-table-column>	
 			    <el-table-column label="关联应用"  sortable='true' prop='author'>
@@ -23,15 +21,11 @@
 				        <span>正常</span>
 			      	</div>
 			      	<div v-else-if='scope.row.type == 3'>
-				        <el-tooltip class="item" effect="dark" content="AppID 已停用，请联系管理员" placement="top">
-					     	<i class='el-icon-remove'></i>
-					    </el-tooltip>
+					    <i class='el-icon-remove'></i>
 				        <span>停用</span>
 			      	</div>
-			      	<div v-else>
-				        <el-tooltip class="item" effect="dark" content="AppID 异常，请联系管理员" placement="top">
-					     	<i class='el-icon-warning'></i>
-					    </el-tooltip>
+			      	<div v-else>				        
+					    <i class='el-icon-warning'></i>					   
 				        <span>异常</span>
 			      	</div>
 			      </template>
@@ -43,15 +37,16 @@
 			      </template>
 			    </el-table-column>
 			
-			    <el-table-column label="操作" prop='importance' width='100px'>
+			    <el-table-column prop='importance' width='100px'>
 			    	<template slot-scope="scope">
 			      <el-dropdown :hide-on-click="false"  placement='bottom-start' @command="handleCommand($event,scope.row)">
 					  <span class="el-dropdown-link">
-					    <i class="el-icon-more"></i>
+					    <svg-icon icon-class='more'></svg-icon>
 					  </span>
 					  <el-dropdown-menu slot="dropdown">
-					    <el-dropdown-item command="edit" v-show='scope.row.type == 1'>修改密钥</el-dropdown-item>
-					    <el-dropdown-item command="delete">停用</el-dropdown-item>
+					    <el-dropdown-item command="edit">修改密钥</el-dropdown-item>
+					    <el-dropdown-item command="enable" v-if='scope.row.type == 3'>启用</el-dropdown-item>
+					    <el-dropdown-item command="disable" v-else>停用</el-dropdown-item>
 					  </el-dropdown-menu>
 					</el-dropdown>
 					</template>
@@ -71,33 +66,30 @@
 			    </el-pagination>
 			  </div>
 		</div>
-		<el-dialog title="编辑" :visible.sync="editDialog" width='600px'>
+		<el-dialog title="修改密钥" :visible.sync="editDialog" width='600px'>
 		  <edit-page :row='editcheck' @closedialog='editDialog=false' @successdialog='returnSuccess'></edit-page>
 		</el-dialog>
-		<el-dialog title="删除" :visible.sync="deleteDialog" width='450px'>
-		  <delete-page :row='editcheck' @closedialog='deleteDialog=false' @successdialog='returnSuccess'></delete-page>
+		<el-dialog title="停用" :visible.sync="disableDialog" width='450px'>
+		  <disable-page :row='editcheck' @closedialog='disableDialog=false' @successdialog='returnSuccess'></disable-page>
 		</el-dialog>
-		<el-dialog title="申请AppID" :visible.sync="addDialog" width='450px'>
-		  <add-page :row='editcheck' @closedialog='addDialog=false' @successdialog='returnSuccess'></add-page>
-		</el-dialog>
-		<el-dialog title="AppID详情" :visible.sync="detailDialog" width='450px'>
-		  <detail-page :row='editcheck' @closedialog='detailDialog=false'></detail-page>
+		<el-dialog title="启用" :visible.sync="enableDialog" width='450px'>
+		  <enable-page :row='editcheck' @closedialog='enableDialog=false' @successdialog='returnSuccess'></enable-page>
 		</el-dialog>
 	</div>
 </template>
 
 <script>
 	import EditPage from './operation/edit'
-	import DeletePage from './operation/delete'
-	import DetailPage from './operation/detail'
+	import DisablePage from './operation/disable'
+	import EnablePage from './operation/enable'
 	export default {
-		components:{ EditPage, DeletePage, DetailPage },
+		components:{ EditPage, DisablePage, EnablePage },
 	  data() {
 	  	return {
 	  		pageNumber: 100,
-	  		editDialog: false,
-	  		detailDialog: false,	  		
-	  		deleteDialog: false,
+	  		editDialog: false, 		
+	  		enableDialog: false,
+	  		disableDialog: false,
 	  		editcheck:null,
 	  		currentPage: 2,
 	  		pageSize: 10,
@@ -125,31 +117,20 @@
 		  		//this.pageSize = val
 		  		//this.fetchData()
 		  	},
-		  	detailchack(row) {
-		  		this.editcheck = row;
-		  		this.detailDialog = true;
-		  	},
 		  	returnSuccess() {
-		  		if(this.deleteDialog){
-		  			this.deleteDialog = false;
-		  			this.list.forEach((item,i) => {
-			  			if(item.id == this.editcheck.id){
-			  				this.list.splice(i,1);
-			  			}
-			  		});
-		  		}
-		  		else {
-		  			this.editDialog = false;
-		  		}
+		  		this.editDialog = false;
+		  		this.disableDialog = false;
+		  		this.enableDialog = false;
 		  		//this.fetchData()
 		  	},
 		  	handleCommand(command,row) {
+		  		this.editcheck = row;
 		  		if(command == 'edit'){
-		  			this.editcheck = row;
 		  			this.editDialog = true;
-		  		}else if (command == 'delete'){
-		  			this.editcheck = row;
-		  			this.deleteDialog = true;
+		  		}else if (command == 'disable'){
+		  			this.disableDialog = true;
+		  		}else if (command == 'enable'){
+		  			this.enableDialog = true;
 		  		}
 		  	}
 	  }

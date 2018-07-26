@@ -1,11 +1,11 @@
 <template>
-	<div class="app-container">
+	<div class="app-container appallstore">
 		<div class='search'>
     			<router-link to="/myapp">我的应用</router-link>
         		<router-link to="/appgrounding">应用上架</router-link>
         		<router-link to="/appkey">密钥管理</router-link>
         		<div class='search-input'>
-			  <el-input placeholder="请输入应用名称" v-model="inputval" size="small">
+			  <el-input placeholder="请输入应用名称" v-model="inputval" size="small" clearable>
 			    <el-button slot="append" icon="el-icon-search" @click='searchApp'></el-button>
 			  </el-input>
 			</div>
@@ -14,15 +14,21 @@
 			<ul>
 				<li>
 					<span class='spatitle'>应用分类：</span>	
-					<span :code='item.code' v-for='(item,index) in appsorganizer' :key='index'>{{item.name}}</span>
+					<el-radio-group v-model="leicheck">
+				      <el-radio-button v-for='(item,index) in appsorganizer' :label="item.code">{{item.name}}</el-radio-button>
+				    </el-radio-group>
 				</li>
 				<li>
 					<span class='spatitle'>业务标签：</span>
-					<span :code='item.code' v-for='(item,index) in businesslabel' :key='index'>{{item.name}}</span>
+					<el-radio-group v-model="yecheck">
+				      <el-radio-button v-for='(item,index) in businesslabel' :label="item.code">{{item.name}}</el-radio-button>
+				    </el-radio-group>
 				</li>
 				<li>
 					<span class='spatitle'>价格：</span>
-					<span :code='item.code' v-for='(item,index) in apppric' :key='index'>{{item.name}}</span>
+					<el-radio-group v-model="price">
+				      <el-radio-button v-for='(item,index) in apppric' :label="item.code">{{item.name}}</el-radio-button>
+				   </el-radio-group>
 				</li>
 			</ul>
 			<div class='app-tempplate'>
@@ -42,11 +48,14 @@
 	export default {
 		data() {
 			return {
-				searchname:'',
-				inputval:'',
+				searchname: '',
+				inputval: '',
+				leicheck: '',
+				yecheck: '',
+				price: '',
 				appsorganizer: [
 					{
-						code:'code1',
+						code:'',
 						name:'全部'
 					},
 					{
@@ -54,35 +63,39 @@
 						name:'基础软件'
 					},
 					{
-						code:'code2',
-						name:'基础软件'
+						code:'code3',
+						name:'业务工具'
 					},
 					{
-						code:'code2',
-						name:'基础软件'
+						code:'code4',
+						name:'SDK/API'
+					},
+					{
+						code:'code5',
+						name:'微服务'
 					}
 				],
 				businesslabel:[
 					{
-						code:'code1',
+						code:'',
 						name:'全部'
 					},
 					{
 						code:'code2',
-						name:'基础软件'
+						name:'办公软件'
 					},
 					{
-						code:'code2',
-						name:'基础软件'
+						code:'code3',
+						name:'必要插件'
 					},
 					{
-						code:'code2',
+						code:'code4',
 						name:'基础软件'
 					}
 				],
 				apppric:[
 					{
-						code:'code1',
+						code:'',
 						name:'全部'
 					},
 					{
@@ -90,11 +103,11 @@
 						name:'0-999'
 					},
 					{
-						code:'code2',
+						code:'code3',
 						name:'1000-4999'
 					},
 					{
-						code:'code2',
+						code:'code4',
 						name:'5000-9999'
 					}
 				]
@@ -110,8 +123,8 @@
 	}
 </script>
 
-<style rel="stylesheet/scss" lang="scss" scoped>
-	.app-container {
+<style rel="stylesheet/scss" lang="scss" >
+	.app-container.appallstore {
 		position: relative;
 		.search {
 	    		position: absolute;
@@ -135,40 +148,46 @@
 				margin:0;
 				font-size: 16px;
 			}
-			ul {
+			&>ul {
 				background: #fff;
 				margin: 0;
 				padding: 20px;
 			}
-			ul>li {
+			&>ul>li {
 				list-style: none;
 				height: 40px;
 				line-height: 40px;
 				span {
 					display: inline-block;
-					margin-right: 15px;
+					border: none;
 					font-size: 14px;
-					cursor: pointer;
+					font-weight: 400;
 					color: #666;
+				}
+				.spatitle {
+					width: 100px;
+					font-size: 15px;
+					background: none;
+					text-align: right;
+				}	
+				.el-radio-button__inner {
+					margin-right: 15px;
+					cursor: pointer;
 					background: #EBEEF5;
 					height: 20px;
 					line-height: 20px;
 					border-radius: 15px;
 					padding: 0 10px;
-					&.spatitle {
-						width: 100px;
-						padding: 0;
-						font-size: 15px;
-						background: none;
-						text-align: right;
-					}
 					&:hover {
 						background:  rgb(232,245,251);
 						color: #1482F0;
 					}
-					&.spatitle:hover {
-						background:  none;
-						color: #666;
+				}
+				.is-active {
+					.el-radio-button__inner {
+						box-shadow: none;
+						background:  rgb(232,245,251);
+						color: #1482F0;
 					}
 				}
 			}

@@ -52,7 +52,7 @@
 			    			<li v-if='scope.row.type == 1 || scope.row.type == 4'>
 			    				<el-dropdown :hide-on-click="false"  placement='bottom-start' @command="handleCommand($event,scope.row)">
 							  <span class="el-dropdown-link">
-							    <i class="el-icon-more" style='cursor:pointer'></i>
+							    <svg-icon icon-class='more' style='cursor:pointer'></svg-icon>
 							  </span>
 							  <el-dropdown-menu slot="dropdown">
 							    <el-dropdown-item command="edit">编辑</el-dropdown-item>
@@ -63,7 +63,7 @@
 			    			<li v-else-if='scope.row.type == 2'>
 			    				<el-dropdown :hide-on-click="false"  placement='bottom-start' @command="handleCommand($event,scope.row)">
 							  <span class="el-dropdown-link">
-							    <i class="el-icon-more" style='cursor:pointer'></i>
+							    <svg-icon icon-class='more' style='cursor:pointer'></svg-icon>
 							  </span>
 							  <el-dropdown-menu slot="dropdown">
 							    <el-dropdown-item command="withdraw">申请撤回</el-dropdown-item>

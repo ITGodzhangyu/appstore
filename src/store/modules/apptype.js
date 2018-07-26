@@ -1,7 +1,8 @@
 const apptype = {
   state: {
     type: '',
-    name: ''
+    name: '',
+    appid:''
   },
   mutations: {
     SET_APPTYPE: (state, type) => {
@@ -9,6 +10,9 @@ const apptype = {
     },
     SET_APPNAME: (state, name) => {
       state.name = name
+    },
+    SET_APPID: (state, appid) => {
+      state.appid = appid
     }
   }
 }

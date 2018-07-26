@@ -13,6 +13,7 @@
 
 <script>
 	import { mapMutations } from 'vuex'
+	import { getRecommendedList } from '@/api/apptable'
 	export default {
 	  data() {
 	  	return {
@@ -26,25 +27,33 @@
 					{
 						icon:'user',
 						name:'应用名称',
-						type:'code1',
+						type:'code2',
 						price:1000
 					},
 					{
 						icon:'user',
 						name:'应用名称',
-						type:'code1',
+						type:'code3',
 						price:1000
 					}
 				]
 	  	}
 	  },
+	   created() {
+	    //this.fetchData()
+	  },
 	  methods: {
-	  	...mapMutations(['SET_APPTYPE','SET_APPNAME']),
-	  	golink(ttype) {
-	  		this.$set(this,'active',ttype);
-    			this.SET_APPTYPE(ttype);
+	  	...mapMutations([ 'SET_APPID' ]),
+	  	golink(appid) {
+    			this.SET_APPID(appid);
 	  		this.$router.push('/detailpages');
-	  	}
+	  	},
+	  	fetchData() {
+	      getRecommendedList(this.listQuery).then(response => {
+	        this.list = response.data.items
+	      }).catch((err) => {
+	      })
+	    }
 	  }
 	}
 </script>

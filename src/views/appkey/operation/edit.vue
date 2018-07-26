@@ -1,39 +1,18 @@
 <template>
 	<div class='edit-content'>
-		<el-form :model="row">
+		<el-form :model="row" label-width='70px'>
 			<el-form-item label="AppID：">
 			   <span>{{row.id}}</span>
 			</el-form-item>
 			<el-form-item label="密钥：">
-			   <span>{{row.id}}</span>
+			   <el-input v-model='edittext' size='mini'></el-input>
 			</el-form-item>
-			<el-form-item label="关联应用：">
-				<span>{{row.author}}</span>
+			<el-form-item>
+				<div class='btn'>
+					<el-button type="primary" @click="updata" size='small' :loading="loading">修 改</el-button>
+	    		   		<el-button @click="$emit('closedialog')" size='small'>取 消</el-button>
+				</div>
 			</el-form-item>
-			<el-form-item label="状态：">
-			   <span v-if='row.type == 1'>
-		      		<i class='el-icon-success'></i>
-			        <span>正常</span>
-		      	</span>
-		      	<span v-else-if='row.type == 3'>
-				    <i class='el-icon-remove'></i>				    
-			        <span>停用</span>
-		      	</span>
-		      	<span v-else>
-				    <i class='el-icon-warning'></i>
-			        <span>异常</span>
-		      	</span>
-			</el-form-item>
-			<el-form-item label="申请时间：">
-				<span>{{row.timestamp}}</span>
-			</el-form-item>
-			<el-form-item label="描述：">
-			    <el-input type="textarea" v-model="edittext"></el-input>
-			 </el-form-item>
-			 <el-form-item style='text-align:right'>
-			    <el-button type="primary" @click="updata" size='small' :loading="loading">保 存</el-button>
-	    			<el-button @click="$emit('closedialog')" size='small'>取 消</el-button>
-			 </el-form-item>
 		</el-form>
 	</div>
 </template>
@@ -46,9 +25,6 @@
 	  		edittext: this.row.id,
 	  		loading: false
 	  	}
-	  },
-	  created() {
-	  	//this.edittext = this.row.id;
 	  },
 	  props:{
 		 row: {
@@ -66,7 +42,7 @@
 	  			this.loading = false;
 	  			this.$emit('successdialog');
 	  			this.$message({
-	    				message: '保存成功',
+	    				message: '修改成功',
 	    				type: 'success',
 	          		center: true
         			});
@@ -102,6 +78,9 @@
 			}
 			.el-icon-remove{
 				color: rgb(219,106,103);
+			}
+			.btn {
+				text-align: right;
 			}
 		}
 	}

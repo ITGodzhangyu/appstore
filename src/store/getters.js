@@ -6,6 +6,7 @@ const getters = {
   apptype: state => state.apptype.type,
   appname: state => state.apptype.name,
   appground: state => state.appground.id,
+  appid: state => state.apptype.appid,
   name: state => state.user.name,
   roles: state => state.user.roles
 }

@@ -7,7 +7,7 @@
 						<h2>关系数据库中间件</h2>
 						<el-dropdown :hide-on-click="false"  placement='bottom-end' @command="handleCommand($event)">
 						  <span class="el-dropdown-link" style='margin:0'>
-						    <i class="el-icon-more" style='cursor:pointer'></i>
+						   <svg-icon icon-class='more' style='cursor:pointer'></svg-icon>
 						  </span>
 						  <el-dropdown-menu slot="dropdown">
 						    <el-dropdown-item command="edit">编辑</el-dropdown-item>

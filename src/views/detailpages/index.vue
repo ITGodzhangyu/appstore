@@ -16,13 +16,14 @@
 			</div>
 		</div>
 		<div class='cont-right'>
-			<recommended></recommended>
+			<recommended :row='row'></recommended>
 		</div>
 	</div>
 </template>
 
 <script>
 	import { mapGetters } from 'vuex'
+	import { getAppDetail } from '@/api/apptable'
 	import Tab from '@/components/Tab'
 	import Recommended from '@/components/Recommended'
 	export default {
@@ -33,19 +34,36 @@
 					pushDate: '2018-7-8',
 					textnumber: '5',
 					msg:'Xprsqb Lfykrgzgp Eqjt Dtvcdn Wqenu Yooecnl Wtlwpmyx Qowur LfdfXprsqb Lfykrgzgp Eqjt Dtvcdn Wqenu Yooecnl Wtlwpmyx Qowur LfdfXprsqb Lfykrgzgp Eqjt Dtvcdn Wqenu Yooecnl Wtlwpmyx Qowur LfdfXprsqb Lfykrgzgp Eqjt Dtvcdn Wqenu Yooecnl Wtlwpmyx Qowur Lfdfg'
-				}
+				},
+				row: null
 			}
 		},
 	  	components: { Tab, Recommended},
 	  	computed: {
 		    	...mapGetters([
 		      'apptype',
-		      'appname'
+		      'appid'
 		    ])
 		 },
-	  	created() {
-	  		console.log(this.apptype)
-	  	}
+		 created() {
+		    //this.fetchData()
+		  },
+		 methods: {
+		 	fetchData() {
+		 		this.listLoading = true
+			    getAppDetail(this.listQuery).then(response => {
+			        this.list = response.data.items
+			        this.listLoading = false
+			    }).catch((err) => {
+			      	this.listLoading = false
+			    })
+		 	}
+		 },
+		 watch: {
+		 	appid(){
+		 		alert(this.appid)
+		 	}
+		 }
 	}
 </script>
 

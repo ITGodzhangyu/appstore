@@ -1,6 +1,12 @@
 <template>
 	<div class='app-table'>
-		<el-table :data="list" fit highlight-current-row @row-click='goDetailpages' style="width: 100%" v-loading.body="listLoading" element-loading-text="请给我点时间！" header-cell-class-name='table-head'>
+		<el-table :data="list" fit highlight-current-row
+			 @row-click='goDetailpages' 
+			 style="width: 100%" 
+			 v-loading.body="listLoading" 
+			 @sort-change='sortprop=$event.prop;sortorder=$event.order'
+			 element-loading-text="请给我点时间！" 
+			 header-cell-class-name='table-head'>
 		    <el-table-column align="left" label="应用名称" prop='id' width='200px'>
 		      <template slot-scope="scope">
 		      	 <img src='@/img/app.png'/>
@@ -49,13 +55,15 @@
 </template>
 
 <script>
-	import { getList } from '@/api/table'
-	import { mapGetters } from 'vuex'
+	import { getList } from '@/api/apptable'
+	import { mapGetters, mapMutations } from 'vuex'
 	export default {
 	  data() {
 	  	return {
 	  		pageNumber: 1000,
-	  		currentPage: 2,
+	  		currentPage: 1,
+	  		sortprop: '',
+	  		sortorder: '',
 	  		pageSize: 10,
 	  		listLoading: false,
 	  		list:[
@@ -77,20 +85,18 @@
 	    //this.fetchData()
 	  },
 	  computed:{
-	      ...mapGetters([
-	        'apptype'
-	      ])
-	    },
+	      ...mapGetters([ 'apptype' ]),
+	   },
 	  methods:{
+	  	...mapMutations(['SET_APPID' ]),
 	  	handleSizeChange(val) {
-	  		this.currentPage = val
 	  		//this.fetchData()
 	  	},
 	  	goDetailpages(item) {
+	  		this.SET_APPID(item.id);
 	  		this.$router.push('/detailpages');
 	  	},
 	  	handleCurrentChange(val) {
-	  		this.pageSize = val
 	  		//this.fetchData()
 	  	},
 	  	fetchData() {
@@ -108,7 +114,12 @@
 	  			//this.fetchData();
 	  		},
 	  		searchname() {
-	  			alert(this.searchname)
+	  			//this.fetchData();
+	  		},
+	  		sortprop() {
+	  			//this.fetchData();
+	  		},
+	  		sortorder() {
 	  			//this.fetchData();
 	  		}
 	  }

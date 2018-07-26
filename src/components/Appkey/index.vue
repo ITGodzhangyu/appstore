@@ -47,7 +47,7 @@
 			    	<template slot-scope="scope">
 			      <el-dropdown :hide-on-click="false"  placement='bottom-start' @command="handleCommand($event,scope.row)">
 					  <span class="el-dropdown-link">
-					    <i class="el-icon-more"></i>
+					    <svg-icon icon-class='more' style='cursor:pointer'></svg-icon>
 					  </span>
 					  <el-dropdown-menu slot="dropdown">
 					    <el-dropdown-item command="edit" v-show='scope.row.type == 1'>编辑</el-dropdown-item>
@@ -77,11 +77,14 @@
 		<el-dialog title="删除" :visible.sync="deleteDialog" width='450px'>
 		  <delete-page :row='editcheck' @closedialog='deleteDialog=false' @successdialog='returnSuccess'></delete-page>
 		</el-dialog>
-		<el-dialog title="申请AppID" :visible.sync="addDialog" width='450px'>
+		<el-dialog title="申请 AppID" :visible.sync="addDialog" width='450px'>
 		  <add-page :row='editcheck' @closedialog='addDialog=false' @successdialog='returnSuccess'></add-page>
 		</el-dialog>
-		<el-dialog title="AppID详情" :visible.sync="detailDialog" width='450px'>
+		<el-dialog title="AppID 详情" :visible.sync="detailDialog" width='450px'>
 		  <detail-page :row='editcheck' @closedialog='detailDialog=false'></detail-page>
+		</el-dialog>
+		<el-dialog title="申请成功" :visible.sync="successDialog" width='600px'>
+		  <success-page :row='editcheck'></success-page>
 		</el-dialog>
 	</div>
 </template>
@@ -91,8 +94,9 @@
 	import DeletePage from './operation/delete'
 	import AddPage from './operation/add'
 	import DetailPage from './operation/detail'
+	import SuccessPage from './operation/success'
 	export default {
-		components:{ EditPage, DeletePage, AddPage, DetailPage },
+		components:{ EditPage, DeletePage, AddPage, DetailPage, SuccessPage },
 	  data() {
 	  	return {
 	  		pageNumber: 100,
@@ -100,7 +104,8 @@
 	  		addDialog: false,
 	  		detailDialog: false,	  		
 	  		deleteDialog: false,
-	  		editcheck:null,
+	  		successDialog: false,
+	  		editcheck: {"type":'1','id':'AppID_sadasabfbfbbsahwhgevdff1','author':'未关联应用','timestamp':'2018-7-8 11:30:09'},
 	  		currentPage: 2,
 	  		pageSize: 10,
 	  		listLoading: false,
@@ -131,7 +136,7 @@
 		  		this.editcheck = row;
 		  		this.detailDialog = true;
 		  	},
-		  	returnSuccess() {
+		  	returnSuccess(data) {
 		  		if(this.deleteDialog){
 		  			this.deleteDialog = false;
 		  			this.list.forEach((item,i) => {
@@ -143,6 +148,7 @@
 		  			this.addDialog = false;
 		  			let data = {"type":'1','id':'AppID_sadasabfbfbbsahwhgevdff'+this.list.length+2,'author':'未关联应用','timestamp':'2018-7-8 11:30:09'};
 		  			this.list.push(data);
+		  			this.successDialog = true;
 		  		}
 		  		else {
 		  			this.editDialog = false;

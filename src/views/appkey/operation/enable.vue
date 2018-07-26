@@ -1,35 +1,40 @@
 <template>
 	<div class='delete-content'>
-		<p>AppID 描述</p>
-		<div class='textcont'>
-			<el-input type="textarea" v-model="edittext" placeholder='描述内容不超过200字'></el-input>
-		</div>
-		<div class='btn'>
-			<el-button type="primary" @click="added" size='small' :loading="loading">申 请</el-button>
+		<p>确定要启用“{{row.id}}”么?</p>
+		<div>
+			<el-button type="primary" @click="enabled" size='small' :loading="loading">启 用</el-button>
 	    		<el-button @click="$emit('closedialog')" size='small'>取 消</el-button>
 		</div>
 	</div>
 </template>
 
 <script>
-	import { createKey } from '@/api/key'
+	import { deleteKey } from '@/api/key'
 	export default {
 	  data() {
 	  	return {
-	  		loading: false,
-	  		edittext: '',
-	  		editcheck: {id:'0',des:'pp'},
-	  		successDialog: false
+	  		loading: false
 	  	}
 	  },
+	  props:{
+		 row: {
+		    type: Object,
+		    default: {}
+		 }
+	  },
 	  methods: {
-	  	added() {
+	  	enabled() {
 	  		this.loading = true;
 	  		setTimeout(() => {
 	  			this.loading = false;
 	  			this.$emit('successdialog');
+	  			this.$message({
+	    				message: '删除成功',
+	    				type: 'success',
+	          		center: true
+        			});
 	  		},1000);
-//	  		createKey(data).then(response => {
+//	  		deleteKey(data).then(response => {
 //	        		this.row = response.data.items
 //	      	}).catch((err) => {
 //				this.$message({
@@ -46,19 +51,12 @@
 
 <style rel="stylesheet/scss" lang="scss" scoped>
 	.delete-content {
-		.btn {
+		div {
 			margin-top: 30px;
 			text-align: right;
-			.el-button {
+		}
+		    .el-button {
 		    		margin-top: 10px;
 		    }
-		}
-		.textcont {
-			margin-top: 10px;
-			position: relative;
-			.el-textarea {
-				
-			}
-		}
 	}
 </style>
